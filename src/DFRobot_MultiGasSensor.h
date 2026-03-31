@@ -1,42 +1,47 @@
 /*!
-  * @file  DFRobot_MultiGasSensor.h
-  * @brief This is a header file of the library for the sensor that can detect gas concentration in the air.
-  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
-  * @license     The MIT License (MIT)
-  * @author      PengKaixing(kaixing.peng@dfrobot.com)
-  * @version     V2.0.0
-  * @date        2021-09-26
-  * @url         https://github.com/DFRobot/DFRobot_MultiGasSensor
-*/
+ * @file  DFRobot_MultiGasSensor.h
+ * @brief This is a header file of the library for the sensor that can detect gas concentration in the air.
+ * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
+ * @license     The MIT License (MIT)
+ * @author      PengKaixing(kaixing.peng@dfrobot.com)
+ * @version     V2.0.0
+ * @date        2021-09-26
+ * @url         https://github.com/DFRobot/DFRobot_MultiGasSensor
+ */
 #ifndef __DFRobot_GAS_H__
 #define __DFRobot_GAS_H__
 
 #include "Arduino.h"
 #include <Wire.h>
 
-
-
 #if defined(ARDUINO_AVR_UNO) || defined(ESP8266)
-  #include "SoftwareSerial.h"
+#include "SoftwareSerial.h"
 #else
-  #include "HardwareSerial.h"
+#include "HardwareSerial.h"
 #endif
 
-
-#define CMD_CHANGE_GET_METHOD          0X78
-#define CMD_GET_GAS_CONCENTRATION      0X86
-#define CMD_GET_TEMP                   0X87
-#define CMD_GET_ALL_DTTA               0X88
-#define CMD_SET_THRESHOLD_ALARMS       0X89
-#define CMD_IIC_AVAILABLE              0X90
-#define CMD_SENSOR_VOLTAGE             0X91
-#define CMD_CHANGE_IIC_ADDR            0X92
+#define CMD_CHANGE_GET_METHOD 0X78
+#define CMD_GET_GAS_CONCENTRATION 0X86
+#define CMD_GET_TEMP 0X87
+#define CMD_GET_ALL_DTTA 0X88
+#define CMD_SET_THRESHOLD_ALARMS 0X89
+#define CMD_IIC_AVAILABLE 0X90
+#define CMD_SENSOR_VOLTAGE 0X91
+#define CMD_CHANGE_IIC_ADDR 0X92
 
 // Open this macro to see the program running in detail
 #define ENABLE_DFROBOT_MULTIGAS_SENSOR_DBG
 
 #ifdef ENABLE_DBG
-#define DFROBOT_MULTIGAS_SENSOR_DBG(...) {Serial.print("[");Serial.print(__FUNCTION__); Serial.print("(): "); Serial.print(__LINE__); Serial.print(" ] 0x"); Serial.println(__VA_ARGS__,HEX);}
+#define DFROBOT_MULTIGAS_SENSOR_DBG(...) \
+  {                                      \
+    Serial.print("[");                   \
+    Serial.print(__FUNCTION__);          \
+    Serial.print("(): ");                \
+    Serial.print(__LINE__);              \
+    Serial.print(" ] 0x");               \
+    Serial.println(__VA_ARGS__, HEX);    \
+  }
 #else
 #define DFROBOT_MULTIGAS_SENSOR_DBG(...)
 #endif
@@ -56,9 +61,9 @@ typedef struct
 /**
  * @struct sAllData_t
  * @brief The struct used when getting all the data
- * @note 
+ * @note
  * @n -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
- * @n |  byte0          | byte1    |          byte2             |        byte3                |  byte4   |  byte5         |  byte6                 |   byte7               |  byte8   
+ * @n |  byte0          | byte1    |          byte2             |        byte3                |  byte4   |  byte5         |  byte6                 |   byte7               |  byte8
  * @n -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
  * @n |  Protocol Head  | Command  | Gas Concentrate High 8-bit | Gas Concentration Low 8-bit | Gas Type | Decimal Digits | Temperature High 8-bit | Temperature Low 8-bit |  CRC
  * @n -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -79,7 +84,7 @@ extern sAllData_t AllData;
 
 /**
  * @struct sAllDataAnalysis_t
- * @brief All the parsed data 
+ * @brief All the parsed data
  */
 typedef struct
 {
@@ -142,8 +147,8 @@ public:
     HIGH_THRESHOLD_ALA = 0x01
   } eALA_t;
 
-  DFRobot_GAS(void){};
-  ~DFRobot_GAS(void){};
+  DFRobot_GAS(void) {};
+  ~DFRobot_GAS(void) {};
 
   /**
    * @fn begin
@@ -225,7 +230,7 @@ public:
    * @fn pack
    * @brief Pack the protocol data for easy transmission
    * @param pBuf Data to be packed
-   * @param len Length of data package  
+   * @param len Length of data package
    * @return sProtocol_t type, indicating return the packed data
    */
   sProtocol_t pack(uint8_t *pBuf, uint8_t len);
@@ -240,7 +245,7 @@ public:
   /**
    * @fn dataIsAvailable
    * @brief Call this function in active mode to determine the presence of data on data line
-   * @return bool type, indicating whether there is data coming from the sensor 
+   * @return bool type, indicating whether there is data coming from the sensor
    * @retval True Has uploaded data
    * @retval False No data uploaded
    */
@@ -271,7 +276,7 @@ protected:
    * @fn readData
    * @brief Get the data with specified length from the specified sensor
    * @param Reg Register address to be read
-   * @param Data Position of the data stored in the register to be read 
+   * @param Data Position of the data stored in the register to be read
    * @param len Length of the data to be written
    */
   virtual int16_t readData(uint8_t Reg, uint8_t *Data, uint8_t len) = 0;
@@ -282,51 +287,57 @@ private:
 
 class DFRobot_GAS_I2C : public DFRobot_GAS
 {
-  public:
-    DFRobot_GAS_I2C(TwoWire *pWire=&Wire,uint8_t addr=0x74);
-    ~DFRobot_GAS_I2C(void){};
-    bool begin(void);
-    void setI2cAddr(uint8_t addr);
-    bool dataIsAvailable(void);
-  protected:
-    void writeData(uint8_t Reg ,void *Data ,uint8_t len);
-    int16_t readData(uint8_t Reg ,uint8_t *Data ,uint8_t len);
-  private:
-    TwoWire* _pWire;
-    uint8_t _I2C_addr;
+public:
+  DFRobot_GAS_I2C(TwoWire *pWire = &Wire, uint8_t addr = 0x74);
+  ~DFRobot_GAS_I2C(void) {};
+  bool begin(void);
+  void setI2cAddr(uint8_t addr);
+  bool dataIsAvailable(void);
+
+protected:
+  void writeData(uint8_t Reg, void *Data, uint8_t len);
+  int16_t readData(uint8_t Reg, uint8_t *Data, uint8_t len);
+
+private:
+  TwoWire *_pWire;
+  uint8_t _I2C_addr;
 };
 
 #if defined(ARDUINO_AVR_UNO) || defined(ESP8266)
 class DFRobot_GAS_SoftWareUart : public DFRobot_GAS
 {
-  public:
-    DFRobot_GAS_SoftWareUart(SoftwareSerial *psoftUart, uint16_t Baud);
-    ~DFRobot_GAS_SoftWareUart(void){};
-    bool begin(void);
-    bool dataIsAvailable(void);
-  protected:
-    void writeData(uint8_t Reg ,void *Data ,uint8_t len);
-    int16_t readData(uint8_t Reg ,uint8_t *Data ,uint8_t len);
-  private:
-    SoftwareSerial *_psoftUart;
-    uint32_t _baud;
+public:
+  DFRobot_GAS_SoftWareUart(SoftwareSerial *psoftUart, uint16_t Baud);
+  ~DFRobot_GAS_SoftWareUart(void) {};
+  bool begin(void);
+  bool dataIsAvailable(void);
+
+protected:
+  void writeData(uint8_t Reg, void *Data, uint8_t len);
+  int16_t readData(uint8_t Reg, uint8_t *Data, uint8_t len);
+
+private:
+  SoftwareSerial *_psoftUart;
+  uint32_t _baud;
 };
 #else
 class DFRobot_GAS_HardWareUart : public DFRobot_GAS
 {
-  public:
-    DFRobot_GAS_HardWareUart(HardwareSerial *phardUart, uint16_t Baud ,uint8_t txpin = 0, uint8_t rxpin = 0);
-    ~DFRobot_GAS_HardWareUart(void){};
-    bool begin(void);
-  protected:
-    bool dataIsAvailable(void);
-    void writeData(uint8_t Reg, void *Data, uint8_t len);
-    int16_t readData(uint8_t Reg, uint8_t *Data, uint8_t len);
-  private:
-    HardwareSerial *_pharduart;
-    uint32_t _baud;
-    uint8_t _rxpin;
-    uint8_t _txpin;
+public:
+  DFRobot_GAS_HardWareUart(HardwareSerial *phardUart, uint16_t Baud, uint8_t txpin = 0, uint8_t rxpin = 0);
+  ~DFRobot_GAS_HardWareUart(void) {};
+  bool begin(void);
+
+protected:
+  bool dataIsAvailable(void);
+  void writeData(uint8_t Reg, void *Data, uint8_t len);
+  int16_t readData(uint8_t Reg, uint8_t *Data, uint8_t len);
+
+private:
+  HardwareSerial *_pharduart;
+  uint32_t _baud;
+  uint8_t _rxpin;
+  uint8_t _txpin;
 };
 #endif
 
