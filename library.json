@@ -1,0 +1,40 @@
+{
+    "name": "DFRobot_MultiGasSensor",
+    "version": "3.0.1",
+    "description": "Fork of the DFRobot multi-gas sensor library (SKU: SEN0465, SEN0466, SEN0467, SEN0468, SEN0469, SEN0470, SEN0471, SEN0472, SEN0473, SEN0474, SEN0475, SEN0476). Supports serial and I2C communication modes, with gas concentration detection and alarm functions.",
+    "keywords": [
+        "gas",
+        "multi-gas",
+        "sensor",
+        "i2c",
+        "uart",
+        "dfrobot",
+        "air quality"
+    ],
+    "authors": [
+        {
+            "name": "DFRobot",
+            "maintainer": false
+        },
+        {
+            "name": "PengKaixing",
+            "email": "kaixing.peng@dfrobot.com",
+            "maintainer": false
+        },
+        {
+            "name": "kkfranco98",
+            "maintainer": true,
+            "url": "https://github.com/kkfranco98"
+        }
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kkfranco98/DFRobot_MultiGasSensor"
+    },
+    "homepage": "https://github.com/kkfranco98/DFRobot_MultiGasSensor",
+    "frameworks": [
+        "arduino"
+    ],
+    "platforms": "*"
+}
