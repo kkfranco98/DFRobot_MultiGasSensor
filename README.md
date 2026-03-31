@@ -1,6 +1,78 @@
 # DFRobot_MultiGasSensor
 - [中文版](./README_CN.md)
 
+# DFRobot_MultiGasSensor
+
+⚠️ **This is a fork of the original DFRobot library**
+
+## Why this fork?
+
+This repository is a fork of the official DFRobot MultiGasSensor library.
+
+The purpose of this fork is **NOT to redesign or rewrite the library**, but to introduce a **small and practical improvement**:
+
+👉 Add a **configurable delay between command write and response read**
+
+### Problem in original library
+The original implementation uses fixed delays:
+
+```cpp
+delay(100);
+```
+
+This can lead to:
+- Unnecessary latency in fast systems
+- Unreliable readings in slower communication setups (I2C/UART bridges, etc.)
+- Poor flexibility depending on hardware and system load
+
+### Solution introduced in this fork
+A configurable delay has been added:
+
+```cpp
+gas.setCommandDelayMs(x);
+```
+
+This allows:
+- Fine tuning depending on hardware (ESP32, Nano 33 BLE, etc.)
+- Reducing latency when possible
+- Increasing robustness when communication is slower
+
+Default behavior is unchanged (10 ms), so existing code remains compatible.
+
+---
+
+## Original README (unchanged below)
+
+Gas sensors are widely applied to many fields such as gas research, environmental detection, production safety monitoring, dissolved gas analysis, pollution source/outlet law research, detection of toxic and harmful and combustible gas, laboratory or on-site simple gas analysis and testing, etc. This Multi-gas Sensor can be used with a variety of gas probes to detect hazardous gas concentration.
+
+## Product Link(https://www.dfrobot.com/product-2510.html)
+
+SKU:SEN0465  
+SKU:SEN0466  
+SKU:SEN0467  
+SKU:SEN0468  
+SKU:SEN0469  
+SKU:SEN0470  
+SKU:SEN0471  
+SKU:SEN0472  
+SKU:SEN0473  
+SKU:SEN0474  
+SKU:SEN0475  
+SKU:SEN0476  
+
+## Summary
+
+This Gas Sensor can be used in complex environments to detect different gas like O2, CO, H2S, 
+NO2, O3, CL2, NH3, H2, HCL, SO2, HF and PH3, which is achieved by just switching corresponding probes.
+Meanwhile, it supports gas high/low threshold alarm.
+
+## Credits
+
+Original library written by PengKaixing (DFRobot)
+Fork modification by kkfranco98
+
+
+
 Gas sensors are widely applied to many fields such as gas research, environmental detection, production safety monitoring, dissolved gas analysis, pollution source/outlet law research, detection of toxic and harmful and combustible gas, laboratory or on-site simple gas analysis and testing, etc. This Multi-gas Sensor can be used with a variety of gas probes to detect hazardous gas concentration.
 ![正反面svg效果图](./resources/images/DFR0784.png)
 
