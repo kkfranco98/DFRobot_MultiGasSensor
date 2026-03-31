@@ -33,12 +33,12 @@
 #define CMD_CHANGE_IIC_ADDR            0X92
 
 // Open this macro to see the program running in detail
-#define ENABLE_DBG
+#define ENABLE_DFROBOT_MULTIGAS_SENSOR_DBG
 
 #ifdef ENABLE_DBG
-#define DBG(...) {Serial.print("[");Serial.print(__FUNCTION__); Serial.print("(): "); Serial.print(__LINE__); Serial.print(" ] 0x"); Serial.println(__VA_ARGS__,HEX);}
+#define DFROBOT_MULTIGAS_SENSOR_DBG(...) {Serial.print("[");Serial.print(__FUNCTION__); Serial.print("(): "); Serial.print(__LINE__); Serial.print(" ] 0x"); Serial.println(__VA_ARGS__,HEX);}
 #else
-#define DBG(...)
+#define DFROBOT_MULTIGAS_SENSOR_DBG(...)
 #endif
 
 /**
