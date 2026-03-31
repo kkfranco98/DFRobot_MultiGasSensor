@@ -298,6 +298,16 @@ sProtocol_t DFRobot_GAS::pack(uint8_t *pBuf, uint8_t len)
   return _protocol;
 }
 
+void DFRobot_GAS::setCommandDelayMs(uint16_t delayMs)
+{
+  _commandDelayMs = delayMs;
+}
+
+uint16_t DFRobot_GAS::getCommandDelayMs(void) const
+{
+  return _commandDelayMs;
+}
+
 bool DFRobot_GAS::changeAcquireMode(eMethod_t mode)
 {
   uint8_t buf[6] = {0};
@@ -306,7 +316,7 @@ bool DFRobot_GAS::changeAcquireMode(eMethod_t mode)
   buf[1] = mode;
   sProtocol_t _protocol = pack(buf, sizeof(buf));
   writeData(0, (uint8_t *)&_protocol, sizeof(_protocol));
-  delay(10);
+  delay(_commandDelayMs);
   readData(0, recvbuf, 9);
   if (recvbuf[2] == 1)
   {
@@ -327,7 +337,7 @@ float DFRobot_GAS::readGasConcentrationPPM(void)
   buf[0] = CMD_GET_GAS_CONCENTRATION;
   sProtocol_t _protocol = pack(buf, sizeof(buf));
   writeData(0, (uint8_t *)&_protocol, sizeof(_protocol));
-  delay(10);
+  delay(_commandDelayMs);
   readData(0, recvbuf, 9);
   float Con = 0.0;
   if (FucCheckSum(recvbuf, 8) == recvbuf[8])
@@ -553,7 +563,7 @@ String DFRobot_GAS::queryGasType(void)
   buf[0] = CMD_GET_GAS_CONCENTRATION;
   sProtocol_t _protocol = pack(buf, sizeof(buf));
   writeData(0, (uint8_t *)&_protocol, sizeof(_protocol));
-  delay(10);
+  delay(_commandDelayMs);
   readData(0, recvbuf, 9);
 
   if (FucCheckSum(recvbuf, 8) == recvbuf[8])
@@ -635,7 +645,7 @@ bool DFRobot_GAS::setThresholdAlarm(eSwitch_t switchof, uint16_t threshold, eALA
   buf[4] = alamethod;
   sProtocol_t _protocol = pack(buf, sizeof(buf));
   writeData(0, (uint8_t *)&_protocol, sizeof(_protocol));
-  delay(10);
+  delay(_commandDelayMs);
   readData(0, recvbuf, 9);
   if (recvbuf[8] != FucCheckSum(recvbuf, 8))
     return false;
@@ -652,7 +662,7 @@ float DFRobot_GAS::readTempC(void)
   buf[0] = CMD_GET_TEMP;
   sProtocol_t _protocol = pack(buf, sizeof(buf));
   writeData(0, (uint8_t *)&_protocol, sizeof(_protocol));
-  delay(10);
+  delay(_commandDelayMs);
   readData(0, recvbuf, 9);
   if (recvbuf[8] != FucCheckSum(recvbuf, 8))
     return 0.0;
@@ -676,7 +686,7 @@ float DFRobot_GAS::getSensorVoltage(void)
   buf[0] = CMD_SENSOR_VOLTAGE;
   sProtocol_t _protocol = pack(buf, sizeof(buf));
   writeData(0, (uint8_t *)&_protocol, sizeof(_protocol));
-  delay(10);
+  delay(_commandDelayMs);
   readData(0, recvbuf, 9);
   if (recvbuf[8] != FucCheckSum(recvbuf, 8))
     return 0.0;
@@ -692,7 +702,7 @@ bool DFRobot_GAS::changeI2cAddrGroup(uint8_t group)
   buf[1] = group;
   sProtocol_t _protocol = pack(buf, sizeof(buf));
   writeData(0, (uint8_t *)&_protocol, sizeof(_protocol));
-  delay(10);
+  delay(_commandDelayMs);
   readData(0, recvbuf, 9);
   if (recvbuf[8] != FucCheckSum(recvbuf, 8))
     return 0;

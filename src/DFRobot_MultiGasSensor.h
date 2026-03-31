@@ -262,6 +262,20 @@ public:
    */
   bool changeI2cAddrGroup(uint8_t group);
 
+  /**
+   * @fn setCommandDelayMs
+   * @brief Set the delay in milliseconds inserted after command write and before reply read
+   * @param delayMs Delay in milliseconds
+   */
+  void setCommandDelayMs(uint16_t delayMs);
+
+  /**
+   * @fn getCommandDelayMs
+   * @brief Get the currently configured command delay in milliseconds
+   * @return uint16_t delay in milliseconds
+   */
+  uint16_t getCommandDelayMs(void) const;
+
 protected:
   /**
    * @fn writeData
@@ -283,6 +297,8 @@ protected:
 
 private:
   bool _tempswitch;
+
+  uint16_t _commandDelayMs = 100;
 };
 
 class DFRobot_GAS_I2C : public DFRobot_GAS
